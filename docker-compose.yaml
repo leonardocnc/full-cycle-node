@@ -12,12 +12,14 @@ services:
       - "8080:80"
     depends_on: 
       - app
+      - db
   
   app:
     build: 
       context: ./node
       dockerfile: Dockerfile
     container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s sh -c "npm install && npm start"
     networks:
       - node-network
     volumes: 
